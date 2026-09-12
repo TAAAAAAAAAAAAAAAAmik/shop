@@ -23,14 +23,22 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from kinetix.db.base import Base, TimestampMixin
+from kinetix.db.base import Base, TimestampMixin, utcnow
 
 
 class TopUpStatus(enum.StrEnum):
     PENDING = "pending"
+    # Manual transfers only: the payer says they sent the money, staff verify it.
+    AWAITING_REVIEW = "awaiting_review"
     PAID = "paid"
+    REJECTED = "rejected"
     EXPIRED = "expired"
     CANCELLED = "cancelled"
+
+    @property
+    def is_open(self) -> bool:
+        """Still occupying the user's single open top-up slot."""
+        return self in {TopUpStatus.PENDING, TopUpStatus.AWAITING_REVIEW}
 
 
 class TxKind(enum.StrEnum):
@@ -211,8 +219,24 @@ class TopUp(Base, TimestampMixin):
     pay_url: Mapped[str | None] = mapped_column(String(512))
     paid_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Manual review trail
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    reviewed_by: Mapped[int | None] = mapped_column(BigInteger)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     user: Mapped[User] = relationship(lazy="selectin")
+
+
+class Setting(Base):
+    """Small key/value store for values staff edit at runtime (bank details)."""
+
+    __tablename__ = "settings"
+
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    value: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False
+    )
 
 
 class PromoCode(Base, TimestampMixin):

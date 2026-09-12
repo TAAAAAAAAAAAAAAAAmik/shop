@@ -13,6 +13,7 @@ from kinetix.keyboards.callbacks import (
     CategoryCB,
     LangCB,
     MenuCB,
+    PayCB,
     ProductCB,
     TopUpCB,
 )
@@ -125,4 +126,31 @@ def languages(locale: str) -> InlineKeyboardMarkup:
         kb.button(text=name, callback_data=LangCB(code=code))
     kb.button(text=t(locale, "btn.back"), callback_data=MenuCB(action="home"))
     kb.adjust(2, 1)
+    return kb.as_markup()
+
+
+def topup_methods(locale: str, *, crypto: bool, manual: bool) -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    if crypto:
+        kb.button(text=t(locale, "btn.method_crypto"), callback_data=PayCB(method="crypto"))
+    if manual:
+        kb.button(text=t(locale, "btn.method_manual"), callback_data=PayCB(method="manual"))
+    kb.button(text=t(locale, "btn.back"), callback_data=MenuCB(action="home"))
+    kb.adjust(1)
+    return kb.as_markup()
+
+
+def manual_request(locale: str, topup_id: int, *, claimable: bool) -> InlineKeyboardMarkup:
+    """Buttons under a manual transfer request."""
+    kb = InlineKeyboardBuilder()
+    if claimable:
+        kb.button(
+            text=t(locale, "btn.paid"), callback_data=TopUpCB(topup_id=topup_id, action="paid")
+        )
+        kb.button(
+            text=t(locale, "btn.cancel"),
+            callback_data=TopUpCB(topup_id=topup_id, action="cancel"),
+        )
+    kb.button(text=t(locale, "btn.menu"), callback_data=MenuCB(action="home"))
+    kb.adjust(1)
     return kb.as_markup()

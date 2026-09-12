@@ -34,3 +34,12 @@ class TopUpCB(CallbackData, prefix="top"):
 class AdminCB(CallbackData, prefix="a"):
     action: str
     arg: int = 0
+
+
+class PayCB(CallbackData, prefix="pay"):
+    method: str  # crypto | manual
+
+
+class ReviewCB(CallbackData, prefix="rev"):
+    topup_id: int
+    action: str  # open | approve | reject

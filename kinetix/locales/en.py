@@ -142,6 +142,85 @@ TEXTS: dict[str, str] = {
     "language.choose": "🌐 Выберите язык / Choose language:",
     "language.changed": "✅ Language updated.",
 
+    # --- manual transfers ---
+    "btn.paid": "✅ I have paid",
+    "btn.approve": "✅ Approve",
+    "btn.reject": "❌ Reject",
+    "btn.method_crypto": "🤖 Crypto (CryptoBot)",
+    "btn.method_manual": "🏦 Bank transfer",
+    "balance.method": (
+        "💳 <b>Top up balance</b>\n\n"
+        "Current balance: <b>{balance}</b>\n\n"
+        "Choose a payment method:"
+    ),
+    "balance.no_methods": "💳 Top-ups are temporarily unavailable. Contact support: {support}",
+    "manual.ask_amount": (
+        "🏦 <b>Bank transfer</b>\n\n"
+        "Min: {min} · Max: {max}\n\n"
+        "Enter the amount to top up:"
+    ),
+    "manual.instructions": (
+        "🏦 <b>Request for {amount}</b>\n\n"
+        "Transfer the exact amount to these details:\n\n"
+        "{requisites}\n\n"
+        "🔖 Reference: <code>{reference}</code>\n"
+        "Put it in the transfer comment if your bank allows one.\n\n"
+        "Once sent, tap \u00abI have paid\u00bb and it goes to review.\n"
+        "⏳ The request is valid for {ttl} min."
+    ),
+    "manual.claimed": (
+        "⏳ <b>Request {reference} submitted for review</b>\n\n"
+        "Amount: <b>{amount}</b>\n"
+        "Your balance is credited as soon as the transfer is confirmed.\n"
+        "This usually takes a few minutes."
+    ),
+    "manual.already_open": (
+        "⚠️ You already have an open request {reference} for <b>{amount}</b>.\n"
+        "Finish or cancel it before starting a new one."
+    ),
+    "manual.under_review": "⏳ Request {reference} is already under review. Please wait.",
+    "manual.cancelled": "Request cancelled.",
+    "manual.approved": (
+        "✅ <b>Request {reference} approved</b>\n\n"
+        "Credited: <b>{amount}</b>\n"
+        "💰 Balance: <b>{balance}</b>"
+    ),
+    "manual.rejected": (
+        "❌ <b>Request {reference} rejected</b>\n\n"
+        "No transfer of <b>{amount}</b> was found. If you are sure you paid, "
+        "contact support with the receipt: {support}"
+    ),
+    "manual.unavailable": "🏦 Bank details are not configured yet. Contact support: {support}",
+    "admin.btn.requests": "🧾 Requests",
+    "admin.btn.requisites": "🏦 Bank details",
+    "admin.requests.title": "🧾 <b>Requests under review</b>",
+    "admin.requests.empty": "No requests waiting for review.",
+    "admin.requests.card": (
+        "🧾 <b>Request {reference}</b>\n\n"
+        "Customer: {user} (<code>{user_id}</code>)\n"
+        "Amount: <b>{amount}</b>\n"
+        "Submitted: {submitted}"
+    ),
+    "admin.requests.row": "{reference} · {amount} · {user}",
+    "admin.requests.approved": (
+        "✅ Request {reference} approved. Balance of {user}: <b>{balance}</b>"
+    ),
+    "admin.requests.rejected": "❌ Request {reference} rejected.",
+    "admin.requests.gone": "⚠️ This request has already been handled.",
+    "admin.requisites.current": (
+        "🏦 <b>Bank details for transfers</b>\n\n"
+        "{requisites}\n\n"
+        "Send new text to replace them."
+    ),
+    "admin.requisites.empty": "No bank details set. Send the text customers should see.",
+    "admin.requisites.saved": "✅ Bank details updated.",
+    "admin.notify.review": (
+        "🧾 <b>New request {reference}</b>\n\n"
+        "Customer: {user} (<code>{user_id}</code>)\n"
+        "Amount: <b>{amount}</b>\n\n"
+        "Check the incoming transfer and approve."
+    ),
+
     # --- admin ---
     "admin.menu": "⚙️ <b>Admin panel</b>",
     "admin.denied": "🚫 Not enough permissions.",

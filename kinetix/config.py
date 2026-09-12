@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     # --- Referrals ---
     referral_percent: int = Field(default=5, alias="REFERRAL_PERCENT")
 
+    # --- Manual bank transfer (staff confirm the payment by hand) ---
+    manual_payment_enabled: bool = Field(default=True, alias="MANUAL_PAYMENT_ENABLED")
+    manual_requisites: str = Field(default="", alias="MANUAL_REQUISITES")
+    manual_ttl_minutes: int = Field(default=180, alias="MANUAL_TTL_MINUTES")
+
     # --- CryptoBot (https://t.me/CryptoBot -> Crypto Pay API) ---
     crypto_pay_token: str = Field(default="", alias="CRYPTO_PAY_TOKEN")
     crypto_pay_testnet: bool = Field(default=False, alias="CRYPTO_PAY_TESTNET")

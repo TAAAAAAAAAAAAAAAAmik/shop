@@ -1,9 +1,18 @@
 from __future__ import annotations
 
+import pytest
 import pytest_asyncio
+from aiogram import Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 
+from kinetix.__main__ import build_dispatcher
+from kinetix.config import Settings
 from kinetix.db.base import Database
 from kinetix.db.models import Category, PriceTier, Product, StockItem, User
+from tests.mocked_bot import BOT_USERNAME, make_bot
+from tests.updates import ADMIN_ID
+
+REQUISITES = "Сбербанк 2202 2020 1111 2222\nПолучатель: И. И. Иванов"
 
 
 @pytest_asyncio.fixture
@@ -68,3 +77,41 @@ class Factory:
         await self.session.commit()
         await self.session.refresh(product)
         return product
+
+
+@pytest.fixture
+def settings() -> Settings:
+    return Settings(
+        _env_file=None,
+        BOT_TOKEN="424242:TEST-TOKEN-FOR-UNIT-TESTS",
+        ADMIN_IDS=str(ADMIN_ID),
+        SHOP_NAME="Kinetix",
+        THROTTLE_RATE=0,  # no rate limiting inside tests
+        CRYPTO_PAY_TOKEN="",
+        MANUAL_REQUISITES=REQUISITES,
+        DEFAULT_LOCALE="ru",
+    )
+
+
+# aiogram Routers are module-level singletons and can only be attached to one
+# Dispatcher, so the dispatcher is built once and re-pointed at each test's
+# database through workflow data.
+_dispatcher: Dispatcher | None = None
+
+
+@pytest_asyncio.fixture
+async def app(db, settings):
+    global _dispatcher
+    if _dispatcher is None:
+        _dispatcher = build_dispatcher(db, settings, crypto=None)
+
+    dp = _dispatcher
+    dp["database"] = db
+    dp["settings"] = settings
+    dp["crypto"] = None
+    dp["bot_username"] = BOT_USERNAME
+    dp.fsm.storage = MemoryStorage()  # no FSM leakage between tests
+
+    bot, session = make_bot()
+    yield dp, bot, session
+    await bot.session.close()

@@ -140,6 +140,85 @@ TEXTS: dict[str, str] = {
     "language.choose": "🌐 Выберите язык / Choose language:",
     "language.changed": "✅ Язык изменён.",
 
+    # --- manual transfers ---
+    "btn.paid": "✅ Я оплатил",
+    "btn.approve": "✅ Подтвердить",
+    "btn.reject": "❌ Отклонить",
+    "btn.method_crypto": "🤖 Криптовалюта (CryptoBot)",
+    "btn.method_manual": "🏦 Перевод по реквизитам",
+    "balance.method": (
+        "💳 <b>Пополнение баланса</b>\n\n"
+        "Текущий баланс: <b>{balance}</b>\n\n"
+        "Выберите способ оплаты:"
+    ),
+    "balance.no_methods": "💳 Пополнение временно недоступно. Напишите в поддержку: {support}",
+    "manual.ask_amount": (
+        "🏦 <b>Перевод по реквизитам</b>\n\n"
+        "Минимум: {min} · Максимум: {max}\n\n"
+        "Введите сумму пополнения:"
+    ),
+    "manual.instructions": (
+        "🏦 <b>Заявка на {amount}</b>\n\n"
+        "Переведите точную сумму по реквизитам:\n\n"
+        "{requisites}\n\n"
+        "🔖 Код заявки: <code>{reference}</code>\n"
+        "Укажите его в комментарии к переводу, если банк позволяет.\n\n"
+        "После перевода нажмите «Я оплатил» — заявка уйдёт на проверку.\n"
+        "⏳ Заявка действует {ttl} мин."
+    ),
+    "manual.claimed": (
+        "⏳ <b>Заявка {reference} отправлена на проверку</b>\n\n"
+        "Сумма: <b>{amount}</b>\n"
+        "Как только перевод подтвердится, баланс пополнится автоматически.\n"
+        "Обычно это занимает несколько минут."
+    ),
+    "manual.already_open": (
+        "⚠️ У вас уже есть открытая заявка {reference} на <b>{amount}</b>.\n"
+        "Завершите или отмените её, прежде чем создавать новую."
+    ),
+    "manual.under_review": "⏳ Заявка {reference} уже на проверке. Ожидайте подтверждения.",
+    "manual.cancelled": "Заявка отменена.",
+    "manual.approved": (
+        "✅ <b>Заявка {reference} подтверждена</b>\n\n"
+        "Зачислено: <b>{amount}</b>\n"
+        "💰 Баланс: <b>{balance}</b>"
+    ),
+    "manual.rejected": (
+        "❌ <b>Заявка {reference} отклонена</b>\n\n"
+        "Перевод на <b>{amount}</b> не найден. Если вы точно оплатили, "
+        "напишите в поддержку и приложите чек: {support}"
+    ),
+    "manual.unavailable": "🏦 Реквизиты пока не настроены. Напишите в поддержку: {support}",
+    "admin.btn.requests": "🧾 Заявки",
+    "admin.btn.requisites": "🏦 Реквизиты",
+    "admin.requests.title": "🧾 <b>Заявки на проверке</b>",
+    "admin.requests.empty": "Заявок на проверке нет.",
+    "admin.requests.card": (
+        "🧾 <b>Заявка {reference}</b>\n\n"
+        "Покупатель: {user} (<code>{user_id}</code>)\n"
+        "Сумма: <b>{amount}</b>\n"
+        "Отправлена: {submitted}"
+    ),
+    "admin.requests.row": "{reference} · {amount} · {user}",
+    "admin.requests.approved": (
+        "✅ Заявка {reference} подтверждена. Баланс {user}: <b>{balance}</b>"
+    ),
+    "admin.requests.rejected": "❌ Заявка {reference} отклонена.",
+    "admin.requests.gone": "⚠️ Заявка уже обработана.",
+    "admin.requisites.current": (
+        "🏦 <b>Реквизиты для переводов</b>\n\n"
+        "{requisites}\n\n"
+        "Пришлите новый текст, чтобы заменить."
+    ),
+    "admin.requisites.empty": "Реквизиты не заданы. Пришлите текст — он будет показан покупателям.",
+    "admin.requisites.saved": "✅ Реквизиты обновлены.",
+    "admin.notify.review": (
+        "🧾 <b>Новая заявка {reference}</b>\n\n"
+        "Покупатель: {user} (<code>{user_id}</code>)\n"
+        "Сумма: <b>{amount}</b>\n\n"
+        "Проверьте поступление и подтвердите."
+    ),
+
     # --- admin ---
     "admin.menu": "⚙️ <b>Админка</b>",
     "admin.denied": "🚫 Недостаточно прав.",

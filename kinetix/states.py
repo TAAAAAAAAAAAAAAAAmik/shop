@@ -12,6 +12,7 @@ class BuyFlow(StatesGroup):
 
 class TopUpFlow(StatesGroup):
     amount = State()
+    manual_amount = State()
 
 
 class AdminFlow(StatesGroup):
@@ -20,3 +21,4 @@ class AdminFlow(StatesGroup):
     balance_amount = State()
     promo_spec = State()
     broadcast_message = State()
+    requisites = State()

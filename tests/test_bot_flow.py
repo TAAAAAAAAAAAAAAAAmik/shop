@@ -2,96 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-
-import pytest
-import pytest_asyncio
-from aiogram import Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import CallbackQuery, Chat, Message, Update
-from aiogram.types import User as TgUser
 from sqlalchemy import func, select
 
-from kinetix.__main__ import build_dispatcher
-from kinetix.config import Settings
 from kinetix.db.models import Order, StockItem, User
 from kinetix.keyboards.callbacks import BuyCB, CategoryCB, MenuCB, ProductCB
-from tests.mocked_bot import BOT_USERNAME, make_bot
-
-CUSTOMER_ID = 777001
-ADMIN_ID = 999001
-
-
-@pytest.fixture
-def settings() -> Settings:
-    return Settings(
-        BOT_TOKEN="424242:TEST-TOKEN-FOR-UNIT-TESTS",
-        ADMIN_IDS=str(ADMIN_ID),
-        SHOP_NAME="Kinetix",
-        THROTTLE_RATE=0,  # no rate limiting inside tests
-        CRYPTO_PAY_TOKEN="",
-        DEFAULT_LOCALE="ru",
-    )
-
-
-# aiogram Routers are module-level singletons and can only be attached to one
-# Dispatcher, so the dispatcher is built once and re-pointed at each test's
-# database through workflow data.
-_dispatcher: Dispatcher | None = None
-
-
-@pytest_asyncio.fixture
-async def app(db, settings):
-    global _dispatcher
-    if _dispatcher is None:
-        _dispatcher = build_dispatcher(db, settings, crypto=None)
-
-    dp = _dispatcher
-    dp["database"] = db
-    dp["settings"] = settings
-    dp["crypto"] = None
-    dp["bot_username"] = BOT_USERNAME
-    dp.fsm.storage = MemoryStorage()  # no FSM leakage between tests
-
-    bot, session = make_bot()
-    yield dp, bot, session
-    await bot.session.close()
-
-
-def _tg_user(user_id: int) -> TgUser:
-    return TgUser(id=user_id, is_bot=False, first_name="Tester", username=f"user{user_id}")
-
-
-def _message(text: str, user_id: int = CUSTOMER_ID, update_id: int = 1) -> Update:
-    return Update(
-        update_id=update_id,
-        message=Message(
-            message_id=update_id,
-            date=datetime.now(),
-            chat=Chat(id=user_id, type="private"),
-            from_user=_tg_user(user_id),
-            text=text,
-        ),
-    )
-
-
-def _callback(data: str, user_id: int = CUSTOMER_ID, update_id: int = 1) -> Update:
-    return Update(
-        update_id=update_id,
-        callback_query=CallbackQuery(
-            id=str(update_id),
-            from_user=_tg_user(user_id),
-            chat_instance="ci",
-            data=data,
-            message=Message(
-                message_id=update_id,
-                date=datetime.now(),
-                chat=Chat(id=user_id, type="private"),
-                from_user=_tg_user(user_id),
-                text="previous",
-            ),
-        ),
-    )
+from tests.mocked_bot import BOT_USERNAME
+from tests.updates import ADMIN_ID, CUSTOMER_ID
+from tests.updates import callback_update as _callback
+from tests.updates import message_update as _message
 
 
 async def test_start_registers_user_and_shows_menu(app, db):
